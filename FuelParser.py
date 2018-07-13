@@ -19,6 +19,11 @@ def main():
     args = parser.parse_args()
     log().debug('Parsing finished. in_path: ' + str(args.in_path))
 
+    with open(args.in_path) as in_file:
+        data = json.load(in_file)
+        print(data)
+        [print(veh) for veh in data["Vehicles"]]
+
     log().info('Finished')
     print("DONE!")
 
