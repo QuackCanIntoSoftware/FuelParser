@@ -2,6 +2,7 @@ import csv
 import json
 import argparse
 import logging
+import Vehicle
 
 LOG_FORMAT = "%(levelname)s: %(funcName)s; %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
@@ -21,8 +22,14 @@ def main():
 
     with open(args.in_path) as in_file:
         data = json.load(in_file)
-        print(data)
-        [print(veh) for veh in data["Vehicles"]]
+
+        vehicles = []
+
+        for vehicle in data["Vehicles"]:
+            vehicles.append(Vehicle.Vehicle(vehicle))
+
+        [print(veh) for veh in vehicles]
+
 
     log().info('Finished')
     print("DONE!")
