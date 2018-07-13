@@ -30,6 +30,9 @@ def main():
 
         [print(veh) for veh in vehicles]
 
+    for veh in vehicles:
+        veh.generate_csv()
+
 
     log().info('Finished')
     print("DONE!")
