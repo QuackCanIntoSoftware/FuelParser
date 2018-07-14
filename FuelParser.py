@@ -18,8 +18,25 @@ class FuelParser:
             for vehicle in data["Vehicles"]:
                 self.vehicles.append(Vehicle(vehicle))
 
-            log().debug([print(veh) for veh in self.vehicles])
         log().debug("Fuel parser Init End")
+
+    def generate_csv(self, output_file="output/vehicle-{0}-sync.csv"):
+        for i, vehicle in enumerate(self.vehicles):
+            with open(output_file.format(i), 'w') as out_file:
+                self._save_vehicles(out_file, vehicle)
+                self._save_log(out_file, vehicle)
+
+            # fieldnames = ["Data", "Odo (km)","Fuel (litres)","Full","Price (optional)","l/100km (optional)","latitude (optional)","longitude (optional)","City (optional)","Notes (optional)","Missed","TankNumber","FuelType","VolumePrice","StationID (optional)","ExcludeDistance","UniqueId","TankCalc"]
+            # writer = csv.DictWriter(out_file, delimiter=",", fieldnames=fieldnames)
+            # writer.writeheader()
+            # for entry in self.entries:
+            #     writer.writerow({"Data": entry.date, "Odo (km)": entry.odometer, "Fuel (litres)": entry.volume})
+
+    def _save_vehicles(self, output_file, vehicle):
+        pass
+
+    def _save_log(self, output_file, vehicle):
+        pass
 
 class Vehicle:
     def __init__(self, json_record):
@@ -31,15 +48,6 @@ class Vehicle:
 
     def __str__(self):
         return "Vehicle name: {} {}".format(self.name, [str(entry) for entry in self.entries])
-
-    def generate_csv(self):
-        with open("output/output.csv", 'w') as out_file:
-            fieldnames = ["Data", "Odo (km)","Fuel (litres)","Full","Price (optional)","l/100km (optional)","latitude (optional)","longitude (optional)","City (optional)","Notes (optional)","Missed","TankNumber","FuelType","VolumePrice","StationID (optional)","ExcludeDistance","UniqueId","TankCalc"]
-            writer = csv.DictWriter(out_file, delimiter=",", fieldnames=fieldnames)
-            writer.writeheader()
-            for entry in self.entries:
-                writer.writerow({"Data": entry.date, "Odo (km)": entry.odometer, "Fuel (litres)": entry.volume})
-
 
 
 class Entry:
