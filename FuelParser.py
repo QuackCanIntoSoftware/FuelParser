@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 LOG_FORMAT = "%(levelname)s: %(funcName)s; %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
@@ -7,6 +8,18 @@ logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
 def log():
     return logging.getLogger()
 
+class FuelParser:
+    def __init__(self, input_json_file):
+        log().debug("Fuel parser Init Start")
+        self.vehicles = []
+        with open(input_json_file) as in_file:
+            data = json.load(in_file)
+
+            for vehicle in data["Vehicles"]:
+                self.vehicles.append(Vehicle(vehicle))
+
+            log().debug([print(veh) for veh in self.vehicles])
+        log().debug("Fuel parser Init End")
 
 class Vehicle:
     def __init__(self, json_record):
