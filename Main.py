@@ -20,19 +20,8 @@ def main():
     args = parser.parse_args()
     log().debug('Parsing finished. in_path: ' + str(args.in_path))
 
-    with open(args.in_path) as in_file:
-        data = json.load(in_file)
-
-        vehicles = []
-
-        for vehicle in data["Vehicles"]:
-            vehicles.append(FuelParser.Vehicle(vehicle))
-
-        [print(veh) for veh in vehicles]
-
-    for veh in vehicles:
-        veh.generate_csv()
-
+    fuel_parser = FuelParser.FuelParser(args.in_path)
+    
 
     log().info('Finished')
     print("DONE!")
