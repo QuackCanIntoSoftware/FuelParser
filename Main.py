@@ -2,7 +2,7 @@ import csv
 import json
 import argparse
 import logging
-import Vehicle
+import FuelParser
 
 LOG_FORMAT = "%(levelname)s: %(funcName)s; %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
@@ -26,7 +26,7 @@ def main():
         vehicles = []
 
         for vehicle in data["Vehicles"]:
-            vehicles.append(Vehicle.Vehicle(vehicle))
+            vehicles.append(FuelParser.Vehicle(vehicle))
 
         [print(veh) for veh in vehicles]
 
