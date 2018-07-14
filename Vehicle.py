@@ -1,3 +1,4 @@
+import csv
 import logging
 LOG_FORMAT = "%(levelname)s: %(funcName)s; %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
@@ -17,6 +18,14 @@ class Vehicle:
 
     def __str__(self):
         return "Vehicle name: {} {}".format(self.name, [str(entry) for entry in self.entries])
+
+    def generate_csv(self):
+        with open("output/output.csv", 'w') as out_file:
+            fieldnames = ["Data", "Odo (km)","Fuel (litres)","Full","Price (optional)","l/100km (optional)","latitude (optional)","longitude (optional)","City (optional)","Notes (optional)","Missed","TankNumber","FuelType","VolumePrice","StationID (optional)","ExcludeDistance","UniqueId","TankCalc"]
+            writer = csv.DictWriter(out_file, delimiter=",", fieldnames=fieldnames)
+            writer.writeheader()
+            for entry in self.entries:
+                writer.writerow({"Data": entry.date, "Odo (km)": entry.odometer, "Fuel (litres)": entry.volume})
 
 
 
