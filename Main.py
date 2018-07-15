@@ -21,7 +21,7 @@ def main():
     log().debug('Parsing finished. in_path: ' + str(args.in_path))
 
     fuel_parser = FuelParser.FuelParser(args.in_path)
-    
+    fuel_parser.generate_csv()
 
     log().info('Finished')
     print("DONE!")

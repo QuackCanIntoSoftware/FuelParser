@@ -21,9 +21,9 @@ class FuelParser:
         log().debug("Fuel parser Init End")
 
     def generate_csv(self, output_file="output/vehicle-{0}-sync.csv"):
-        for i, vehicle in enumerate(self.vehicles):
+        for i, vehicle in enumerate(self.vehicles, 1):
             with open(output_file.format(i), 'w') as out_file:
-                self._save_vehicles(out_file, vehicle)
+                self._save_vehicle(out_file, vehicle)
                 self._save_log(out_file, vehicle)
 
             # fieldnames = ["Data", "Odo (km)","Fuel (litres)","Full","Price (optional)","l/100km (optional)","latitude (optional)","longitude (optional)","City (optional)","Notes (optional)","Missed","TankNumber","FuelType","VolumePrice","StationID (optional)","ExcludeDistance","UniqueId","TankCalc"]
@@ -32,11 +32,34 @@ class FuelParser:
             # for entry in self.entries:
             #     writer.writerow({"Data": entry.date, "Odo (km)": entry.odometer, "Fuel (litres)": entry.volume})
 
-    def _save_vehicles(self, output_file, vehicle):
-        pass
+    def _save_vehicle(self, output_file, vehicle):
+        log().debug("Writing Vehicle {} data to CSV".format(vehicle.name))
+        lines = [
+            '"## Vehicle"\n',
+            '"Name","Description","DistUnit","FuelUnit","ConsumptionUnit","ImportCSVDateFormat","VIN","Insurance","Plate","Make","Model","Year","TankCount","Tank1Type","Tank2Type","Active","Tank1Capacity","Tank2Capacity"\n',
+        ]
+        lines.append('"{0}","","0","0","0","yyyy-MM-dd","","","","","","","1","100","0","1","60.0","0.0"\n'.format(vehicle.name))
+        output_file.writelines(lines)
 
     def _save_log(self, output_file, vehicle):
-        pass
+        log().debug("Writing {} Log data to CSV".format(vehicle.name))
+        lines = [
+            '"## Log"\n',
+            '"Data","Odo (km)","Fuel (litres)","Full","Price (optional)","l/100km (optional)","latitude (optional)","longitude (optional)","City (optional)","Notes (optional)","Missed","TankNumber","FuelType","VolumePrice","StationID (optional)","ExcludeDistance","UniqueId","TankCalc"\n'
+        ]
+        entries = []
+        last_odo = None
+        for id, entry in enumerate(vehicle.entries, 1):
+            if last_odo is None:
+                average = 0.0
+            else:
+                average = (entry.odometer - last_odo) / entry.volume
+            last_odo = entry.odometer
+            entries.append('"{date}","{odometer}","{litres:0.2f}","{full}","{full_price:0.2f}","{average:0.2f}",,,,"","0","1","0","{unit_price:0.2f}","0","0","{id}","0.0"\n'.format(
+                date=entry.date, odometer=entry.odometer, litres=entry.volume, full='0' if entry.partial else '1', full_price=entry.price_full, average=average,
+                unit_price=entry.price_unit, id=id))
+        lines = lines + entries[::-1]
+        output_file.writelines(lines)
 
 class Vehicle:
     def __init__(self, json_record):
