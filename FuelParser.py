@@ -34,18 +34,19 @@ class FuelParser:
 
     def _save_vehicle(self, output_file, vehicle):
         log().debug("Writing Vehicle {} data to CSV".format(vehicle.name))
+        output_file.write('"## Vehicle"\x0A')
         lines = [
-            '"## Vehicle"\n',
-            '"Name","Description","DistUnit","FuelUnit","ConsumptionUnit","ImportCSVDateFormat","VIN","Insurance","Plate","Make","Model","Year","TankCount","Tank1Type","Tank2Type","Active","Tank1Capacity","Tank2Capacity"\n',
+            '"## Vehicle"',
+            '"Name","Description","DistUnit","FuelUnit","ConsumptionUnit","ImportCSVDateFormat","VIN","Insurance","Plate","Make","Model","Year","TankCount","Tank1Type","Tank2Type","Active","Tank1Capacity","Tank2Capacity"',
         ]
-        lines.append('"{0}","","0","0","0","yyyy-MM-dd","","","","","","","1","100","0","1","60.0","0.0"\n'.format(vehicle.name))
+        lines.append('"{0}","","0","0","0","yyyy-MM-dd","","","","","","","1","100","0","1","60.0","0.0"'.format(vehicle.name))
         output_file.writelines(lines)
 
     def _save_log(self, output_file, vehicle):
         log().debug("Writing {} Log data to CSV".format(vehicle.name))
         lines = [
-            '"## Log"\n',
-            '"Data","Odo (km)","Fuel (litres)","Full","Price (optional)","l/100km (optional)","latitude (optional)","longitude (optional)","City (optional)","Notes (optional)","Missed","TankNumber","FuelType","VolumePrice","StationID (optional)","ExcludeDistance","UniqueId","TankCalc"\n'
+            '"## Log"',
+            '"Data","Odo (km)","Fuel (litres)","Full","Price (optional)","l/100km (optional)","latitude (optional)","longitude (optional)","City (optional)","Notes (optional)","Missed","TankNumber","FuelType","VolumePrice","StationID (optional)","ExcludeDistance","UniqueId","TankCalc"'
         ]
         entries = []
         last_odo = None
